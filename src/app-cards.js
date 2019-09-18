@@ -1,30 +1,52 @@
 import { LitElement, html, css } from 'lit-element'
-import { CARDS } from './data';
+import { router, RouterSlot, RouterLink, routerLinkMixin } from 'lit-element-router'
+import './card-detail'
+import './card-list'
 import './card-item'
-import './data'
+import './card-detail-2'
 
-export class AppCards extends LitElement {
-  static get styles() {
-    return css`
-    .wrapper {
-      width: 90%;
-      margin: 0 auto;
-      margin-top: 2rem;
+export class AppCards extends routerLinkMixin(LitElement) {
+  static get properties() {
+    return {
+      itemDetail: { type: Object },
+      route: { type: String },
+      params: { type: Object },
     }
-    .grid-odd{
-      display: grid;
-      grid-gap: 2rem;
-      justify-content: center;
-      grid-template-columns: repeat(3, 300px);
-    }`;
-  } 
+  }
+
+  constructor() {
+    super()
+    router([{
+        name: 'home',
+        pattern: ''
+    }, {
+        name: 'detail',
+        pattern: '/detail/:id'
+    }, {
+        name: 'not-found',
+        pattern: '*'
+    }], (route, params, query) => {
+        this.route = route
+        this.params = params
+    })
+  }
   
   render() {
     return html`
-      <div class="wrapper grid-odd">
-        ${CARDS.map(card => html`<card-item .card=${card}></card-item>`)}
-      </div>
-    `;
+    <nav>
+      <router-link href='/'>Home</router-link>
+    </nav>
+    <router-slot route='${this.route}'>
+      <card-list slot='home' .getItemCard=${this.getItemCard.bind(this)}></card-list>
+      <card-detail slot='detail' .card=${this.itemDetail}></card-detail>
+      <div slot='not-found'>Not Found</div>
+    </router-slot>
+  `;
+  }
+
+  getItemCard (currenCard) {
+    this.itemDetail = currenCard;
+    this.navigate('/detail/'+currenCard.id);
   }
 }
 

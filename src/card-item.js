@@ -1,4 +1,5 @@
 import {LitElement, html, css} from 'lit-element'
+import {RouterLink} from 'lit-element-router'
 import './components/bullets'
 
 export class CardItem extends LitElement {
@@ -74,7 +75,8 @@ export class CardItem extends LitElement {
 
   static get properties() {
     return {
-      card: Object
+      card: Object,
+      getItemCard: {type: Function},
     };
   }
 
@@ -91,10 +93,10 @@ export class CardItem extends LitElement {
         </ul>
         <div class="card-info">
           <p class="icon eye"></p>
-          <a
-            class="label">
-            Quiero más información
-          </a>
+          <span
+            @click=${() => this.getItemCard(this.card)}>
+            Quiero más información ${this.card.id}
+          </span>
         </div>
       </div>
     `;
