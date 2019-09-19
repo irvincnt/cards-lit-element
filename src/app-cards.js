@@ -3,7 +3,6 @@ import { router, RouterSlot, RouterLink, routerLinkMixin } from 'lit-element-rou
 import './card-detail'
 import './card-list'
 import './card-item'
-import './card-detail-2'
 
 export class AppCards extends routerLinkMixin(LitElement) {
   static get properties() {
@@ -33,14 +32,14 @@ export class AppCards extends routerLinkMixin(LitElement) {
   
   render() {
     return html`
-    <nav>
-      <router-link href='/'>Home</router-link>
-    </nav>
     <router-slot route='${this.route}'>
       <card-list slot='home' .getItemCard=${this.getItemCard.bind(this)}></card-list>
       <card-detail slot='detail' .card=${this.itemDetail}></card-detail>
       <div slot='not-found'>Not Found</div>
     </router-slot>
+    <nav>
+      <router-link href='/'>Home</router-link>
+    </nav>
   `;
   }
 
